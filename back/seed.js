@@ -3,6 +3,7 @@
 import mysql from 'mysql';
 import fs from 'fs';
 
+// Configurations de la base de données
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -13,16 +14,17 @@ const connection = mysql.createConnection({
 connection.connect((err) => {
     if (err) {
         console.error('Erreur de connexion à la base de données :', err);
-        throw err;  // Assurez-vous que l'erreur est traitée ou enregistrée de manière appropriée
     } else {
         console.log('Connecté à la base de données MySQL');
         insertChampions();
     }
 });
 
+// Lire le fichier JSON
 const jsonData = fs.readFileSync('./champions.json', 'utf8');
 const championsData = JSON.parse(jsonData);
 
+// Fonction pour insérer les champions dans la base de données
 const insertChampions = () => {
     const query = 'INSERT INTO champion (name, type) VALUES ?';
     const values = championsData.map(champion => [champion.name, champion.type]);
@@ -37,5 +39,3 @@ const insertChampions = () => {
         connection.end();
     });
 };
-
-insertChampions();
